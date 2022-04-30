@@ -1,4 +1,4 @@
-from Meshing import Node
+from Meshing.Meshing import Node
 from Approximation import PiecewiseLinearInterpolator
 
 nodes = [Node(i*0.2, i) for i in range(0,6)]
