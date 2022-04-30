@@ -1,12 +1,7 @@
-import Meshing
-import approximation
+from Meshing import Node
+from Approximation import PiecewiseLinearInterpolator
 
-n1 = Meshing.Node(0,0)
-n2 = Meshing.Node(1,1)
+nodes = [Node(i*0.2, i) for i in range(0,6)]
+f = lambda x : x*x
 
-nodes = (n1,n2)
-values = (0,1)
-
-f = approximation.PiecewiseLinearInterpolator(nodes, values)
-
-print(f.GetValue(0.5))
+f = PiecewiseLinearInterpolator.CreateFromNodes(f, nodes)

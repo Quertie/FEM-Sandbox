@@ -1,8 +1,10 @@
-import Meshing
+from Meshing import Mesh
 
 class Function:
     def GetValue(self,x):
         return 1 #override this
+    def AsDelegate(self):
+        return lambda x: self.GetValue(x)
 
 class LinearInterpolator(Function):
     def __init__(self, nodes, values):
@@ -15,9 +17,13 @@ class LinearInterpolator(Function):
 
 class PiecewiseLinearInterpolator(Function):
     def __init__(self, nodes, values):
-        self.Mesh = PiecewiseLinearInterpolator.CreateElements(nodes)
+        self.Mesh = Mesh.CreateElements(nodes)
         self.Pieces = dict([(self.Mesh.Elements[i], LinearInterpolator(self.Mesh.Elements[i].Nodes, (values[i], values[i+1]))) for i in range (len(self.Mesh.Elements))])
-    def CreateElements(nodes):
-        return Meshing.Mesh([Meshing.Element([nodes[i], nodes[i+1]]) for i in range(len(nodes)-1)])
-        
-    
+    def GetValue(self, x):
+        element = self.Mesh.GetElementForPosition(x)
+        return self.Pieces[element].GetValue(x)
+
+    @classmethod
+    def CreateFromNodes(cls, f, nodes):
+        instance = cls(nodes, [f(node.Position) for node in nodes])
+        return instance
