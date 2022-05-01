@@ -1,5 +1,5 @@
 from typing import Iterable
-from Meshing.Element import Element
+from Meshing.Elements import Element
 from Meshing.Node import Node
 
 
